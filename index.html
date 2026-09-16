@@ -1,0 +1,1144 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Payroll Manager</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        /* HEADER */
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        header span {
+            color: #9ca3af;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            font-size: 30px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        /* BUSINESS CARDS */
+
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .business-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px);
+            border-color: #2563eb;
+        }
+
+        .business-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .business-card h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .business-card p {
+            color: #6b7280;
+        }
+
+        /* DASHBOARD */
+
+        #dashboard {
+            display: none;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            border: none;
+            background: #374151;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .add-btn {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* SUMMARY */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+
+        .summary-card p {
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .summary-card h2 {
+            font-size: 27px;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f9fafb;
+            font-size: 14px;
+        }
+
+        .salary {
+            font-weight: bold;
+        }
+
+        .action-btn {
+            padding: 7px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .edit {
+            background: #fef3c7;
+        }
+
+        .delete {
+            background: #fee2e2;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 550px;
+            padding: 30px;
+            border-radius: 15px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .daily-salary {
+            background: #eff6ff;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .daily-salary strong {
+            color: #2563eb;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            flex: 1;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            flex: 1;
+            background: #e5e7eb;
+            border: none;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+            color: #6b7280;
+        }
+
+        /* MOBILE */
+
+        @media(max-width: 800px) {
+
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 18px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>💼 My Business Payroll</h1>
+    <span>Worker Management System</span>
+</header>
+
+
+<!-- HOME PAGE -->
+
+<div id="home">
+
+    <div class="container">
+
+        <div class="page-title">
+            <h2>My Businesses</h2>
+            <p>Select a business to manage workers and salaries.</p>
+        </div>
+
+        <div class="business-grid">
+
+            <div class="business-card"
+                 onclick="openBusiness('Hollow Blocks Factory')">
+
+                <div class="business-icon">🧱</div>
+
+                <h3>Hollow Blocks Factory</h3>
+
+                <p>
+                    Manage factory workers,
+                    operators and drivers.
+                </p>
+
+            </div>
+
+
+            <div class="business-card"
+                 onclick="openBusiness('T-Shirt Manufacturing')">
+
+                <div class="business-icon">👕</div>
+
+                <h3>T-Shirt Manufacturing</h3>
+
+                <p>
+                    Manage tailors,
+                    packers and supervisors.
+                </p>
+
+            </div>
+
+
+            <div class="business-card"
+                 onclick="openBusiness('Travel Agency')">
+
+                <div class="business-icon">✈️</div>
+
+                <h3>Travel Agency</h3>
+
+                <p>
+                    Manage guides,
+                    drivers and office staff.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div id="dashboard">
+
+    <div class="container">
+
+        <div class="top-bar">
+
+            <div>
+                <button class="back-btn"
+                        onclick="goHome()">
+                    ← Businesses
+                </button>
+
+                <h2 id="businessTitle"
+                    style="margin-top:15px;">
+                </h2>
+            </div>
+
+            <button class="add-btn"
+                    onclick="openModal()">
+                + Add Worker
+            </button>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary-grid">
+
+            <div class="summary-card">
+                <p>Total Workers</p>
+                <h2 id="totalWorkers">0</h2>
+            </div>
+
+            <div class="summary-card">
+                <p>Total Working Days</p>
+                <h2 id="totalDays">0</h2>
+            </div>
+
+            <div class="summary-card">
+                <p>Total Salary</p>
+                <h2 id="totalSalary">₹0</h2>
+            </div>
+
+        </div>
+
+
+        <!-- WORKER TABLE -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Daily Salary</th>
+                        <th>Days</th>
+                        <th>Bonus</th>
+                        <th>Overtime</th>
+                        <th>Advance</th>
+                        <th>Final Salary</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="workerTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ADD / EDIT MODAL -->
+
+<div class="modal" id="workerModal">
+
+    <div class="modal-box">
+
+        <h2 id="modalTitle">Add Worker</h2>
+
+
+        <div class="form-group">
+
+            <label>Worker Name</label>
+
+            <input
+                type="text"
+                id="workerName"
+                placeholder="Enter worker name">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Role</label>
+
+            <select id="workerRole"
+                    onchange="updateDailySalary()">
+
+            </select>
+
+        </div>
+
+
+        <div class="daily-salary">
+
+            Daily Salary:
+            <strong id="dailySalary">
+                ₹0
+            </strong>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Working Days</label>
+
+            <input
+                type="number"
+                id="workingDays"
+                min="0"
+                placeholder="Example: 26">
+
+        </div>
+
+
+        <div class="form-row">
+
+            <div class="form-group">
+
+                <label>Bonus (₹)</label>
+
+                <input
+                    type="number"
+                    id="bonus"
+                    min="0"
+                    value="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Overtime (₹)</label>
+
+                <input
+                    type="number"
+                    id="overtime"
+                    min="0"
+                    value="0">
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Advance / Deduction (₹)</label>
+
+            <input
+                type="number"
+                id="advance"
+                min="0"
+                value="0">
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button class="cancel-btn"
+                    onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button class="save-btn"
+                    onclick="saveWorker()">
+                Save Worker
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================
+       BUSINESS DATA
+    ========================= */
+
+    const businesses = {
+
+        "Hollow Blocks Factory": {
+
+            "Manager": 1500,
+            "Machine Operator": 900,
+            "Helper": 700,
+            "Driver": 1000,
+            "Electrician": 1100
+
+        },
+
+        "T-Shirt Manufacturing": {
+
+            "Manager": 1500,
+            "Tailor": 1000,
+            "Cutting Master": 1200,
+            "Packing Staff": 650,
+            "Supervisor": 1400,
+            "Helper": 600
+
+        },
+
+        "Travel Agency": {
+
+            "Manager": 1800,
+            "Tour Guide": 1500,
+            "Driver": 1200,
+            "Office Staff": 900,
+            "Trip Coordinator": 1300
+
+        }
+
+    };
+
+
+    /* =========================
+       VARIABLES
+    ========================= */
+
+    let currentBusiness = "";
+
+    let editIndex = -1;
+
+
+    /*
+       Stores workers separately
+       for each business.
+    */
+
+    let workers =
+        JSON.parse(localStorage.getItem("businessWorkers"))
+        || {
+
+            "Hollow Blocks Factory": [],
+
+            "T-Shirt Manufacturing": [],
+
+            "Travel Agency": []
+
+        };
+
+
+    /* =========================
+       OPEN BUSINESS
+    ========================= */
+
+    function openBusiness(name) {
+
+        currentBusiness = name;
+
+        document.getElementById("home")
+            .style.display = "none";
+
+        document.getElementById("dashboard")
+            .style.display = "block";
+
+        document.getElementById("businessTitle")
+            .textContent = name;
+
+        displayWorkers();
+
+    }
+
+
+    /* =========================
+       GO HOME
+    ========================= */
+
+    function goHome() {
+
+        document.getElementById("dashboard")
+            .style.display = "none";
+
+        document.getElementById("home")
+            .style.display = "block";
+
+    }
+
+
+    /* =========================
+       OPEN MODAL
+    ========================= */
+
+    function openModal(index = -1) {
+
+        editIndex = index;
+
+        const modal =
+            document.getElementById("workerModal");
+
+        const roleSelect =
+            document.getElementById("workerRole");
+
+        roleSelect.innerHTML = "";
+
+
+        /*
+           Add roles based on
+           selected business.
+        */
+
+        const roles =
+            businesses[currentBusiness];
+
+
+        for (let role in roles) {
+
+            const option =
+                document.createElement("option");
+
+            option.value = role;
+
+            option.textContent = role;
+
+            roleSelect.appendChild(option);
+
+        }
+
+
+        if (index >= 0) {
+
+            const worker =
+                workers[currentBusiness][index];
+
+            document.getElementById("modalTitle")
+                .textContent = "Edit Worker";
+
+            document.getElementById("workerName")
+                .value = worker.name;
+
+            document.getElementById("workerRole")
+                .value = worker.role;
+
+            document.getElementById("workingDays")
+                .value = worker.days;
+
+            document.getElementById("bonus")
+                .value = worker.bonus;
+
+            document.getElementById("overtime")
+                .value = worker.overtime;
+
+            document.getElementById("advance")
+                .value = worker.advance;
+
+            updateDailySalary();
+
+        }
+
+        else {
+
+            document.getElementById("modalTitle")
+                .textContent = "Add Worker";
+
+            document.getElementById("workerName")
+                .value = "";
+
+            document.getElementById("workingDays")
+                .value = "";
+
+            document.getElementById("bonus")
+                .value = 0;
+
+            document.getElementById("overtime")
+                .value = 0;
+
+            document.getElementById("advance")
+                .value = 0;
+
+            updateDailySalary();
+
+        }
+
+
+        modal.style.display = "flex";
+
+    }
+
+
+    /* =========================
+       CLOSE MODAL
+    ========================= */
+
+    function closeModal() {
+
+        document.getElementById("workerModal")
+            .style.display = "none";
+
+    }
+
+
+    /* =========================
+       DAILY SALARY
+    ========================= */
+
+    function updateDailySalary() {
+
+        const role =
+            document.getElementById("workerRole").value;
+
+        const salary =
+            businesses[currentBusiness][role];
+
+        document.getElementById("dailySalary")
+            .textContent =
+            "₹" + salary.toLocaleString("en-IN");
+
+    }
+
+
+    /* =========================
+       SAVE WORKER
+    ========================= */
+
+    function saveWorker() {
+
+        const name =
+            document.getElementById("workerName")
+                .value.trim();
+
+        const role =
+            document.getElementById("workerRole")
+                .value;
+
+        const days =
+            Number(document.getElementById("workingDays")
+                .value);
+
+        const bonus =
+            Number(document.getElementById("bonus")
+                .value) || 0;
+
+        const overtime =
+            Number(document.getElementById("overtime")
+                .value) || 0;
+
+        const advance =
+            Number(document.getElementById("advance")
+                .value) || 0;
+
+
+        if (name === "") {
+
+            alert("Please enter worker name.");
+
+            return;
+
+        }
+
+
+        if (days < 0 || isNaN(days)) {
+
+            alert("Please enter valid working days.");
+
+            return;
+
+        }
+
+
+        const dailySalary =
+            businesses[currentBusiness][role];
+
+
+        const worker = {
+
+            name: name,
+
+            role: role,
+
+            dailySalary: dailySalary,
+
+            days: days,
+
+            bonus: bonus,
+
+            overtime: overtime,
+
+            advance: advance
+
+        };
+
+
+        if (editIndex >= 0) {
+
+            workers[currentBusiness][editIndex]
+                = worker;
+
+        }
+
+        else {
+
+            workers[currentBusiness]
+                .push(worker);
+
+        }
+
+
+        saveData();
+
+        displayWorkers();
+
+        closeModal();
+
+    }
+
+
+    /* =========================
+       DISPLAY WORKERS
+    ========================= */
+
+    function displayWorkers() {
+
+        const table =
+            document.getElementById("workerTable");
+
+        table.innerHTML = "";
+
+
+        const businessWorkers =
+            workers[currentBusiness];
+
+
+        if (businessWorkers.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="9"
+                        class="empty">
+                        No workers added yet.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+
+        let totalSalary = 0;
+
+        let totalDays = 0;
+
+
+        businessWorkers.forEach(
+            (worker, index) => {
+
+                const salary =
+                    (worker.dailySalary * worker.days)
+                    + worker.bonus
+                    + worker.overtime
+                    - worker.advance;
+
+
+                totalSalary += salary;
+
+                totalDays += Number(worker.days);
+
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td>
+                        <strong>
+                            ${worker.name}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${worker.role}
+                    </td>
+
+                    <td>
+                        ₹${worker.dailySalary
+                            .toLocaleString("en-IN")}
+                    </td>
+
+                    <td>
+                        ${worker.days}
+                    </td>
+
+                    <td>
+                        ₹${worker.bonus
+                            .toLocaleString("en-IN")}
+                    </td>
+
+                    <td>
+                        ₹${worker.overtime
+                            .toLocaleString("en-IN")}
+                    </td>
+
+                    <td>
+                        ₹${worker.advance
+                            .toLocaleString("en-IN")}
+                    </td>
+
+                    <td class="salary">
+                        ₹${salary
+                            .toLocaleString("en-IN")}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="action-btn edit"
+                            onclick="openModal(${index})">
+                            Edit
+                        </button>
+
+                        <button
+                            class="action-btn delete"
+                            onclick="deleteWorker(${index})">
+                            Delete
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                table.appendChild(row);
+
+            }
+        );
+
+
+        document.getElementById("totalWorkers")
+            .textContent =
+            businessWorkers.length;
+
+
+        document.getElementById("totalDays")
+            .textContent =
+            totalDays;
+
+
+        document.getElementById("totalSalary")
+            .textContent =
+            "₹" + totalSalary
+                .toLocaleString("en-IN");
+
+    }
+
+
+    /* =========================
+       DELETE WORKER
+    ========================= */
+
+    function deleteWorker(index) {
+
+        const worker =
+            workers[currentBusiness][index];
+
+
+        const confirmDelete =
+            confirm(
+                `Delete ${worker.name}?`
+            );
+
+
+        if (!confirmDelete) {
+
+            return;
+
+        }
+
+
+        workers[currentBusiness]
+            .splice(index, 1);
+
+
+        saveData();
+
+        displayWorkers();
+
+    }
+
+
+    /* =========================
+       LOCAL STORAGE
+    ========================= */
+
+    function saveData() {
+
+        localStorage.setItem(
+            "businessWorkers",
+            JSON.stringify(workers)
+        );
+
+    }
+
+
+    /* =========================
+       CLOSE MODAL ON OUTSIDE CLICK
+    ========================= */
+
+    window.onclick = function(event) {
+
+        const modal =
+            document.getElementById("workerModal");
+
+        if (event.target === modal) {
+
+            closeModal();
+
+        }
+
+    };
+
+</script>
+
+</body>
+</html>
+```
